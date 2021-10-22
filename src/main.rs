@@ -4,7 +4,11 @@ use std::cmp::{max, min};
 use specs_derive::Component;
 
 mod map;
+mod rect;
+
+
 pub use map::*;
+pub use rect::*;
 
 
 #[derive(Component)]
@@ -101,7 +105,7 @@ fn main() -> rltk::BError  {
         ecs: World::new()
     };
 
-    gs.ecs.insert(new_map());
+    gs.ecs.insert(new_map_rooms_and_corridors());
 
     gs.ecs.register::<Position>();
     gs.ecs.register::<Renderable>();
