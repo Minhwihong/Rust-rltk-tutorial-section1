@@ -105,17 +105,20 @@ fn main() -> rltk::BError  {
         ecs: World::new()
     };
 
-    gs.ecs.insert(new_map_rooms_and_corridors());
-
     gs.ecs.register::<Position>();
     gs.ecs.register::<Renderable>();
     gs.ecs.register::<LeftMover>();
     gs.ecs.register::<Player>();
 
+    let (rooms, map) = new_map_rooms_and_corridors();
+    gs.ecs.insert(map);
+    let (player_x, player_y) = rooms[0].center();
+
+
     // builder pattern (Combining functions in this fashion is called method chaining)
     gs.ecs
         .create_entity()
-        .with(Position{x:40, y:25})
+        .with(Position{x:player_x, y:player_y})
         .with(Renderable {
             glyph: rltk::to_cp437('@'),
             fg : RGB::named(rltk::YELLOW),
@@ -167,10 +170,21 @@ fn player_input(gs: &mut State, ctx: &mut Rltk){
     match ctx.key {
         None => {}
         Some(Key) => match Key {
-            VirtualKeyCode::Left => try_move_player(-1, 0, &mut gs.ecs),
-            VirtualKeyCode::Right => try_move_player(1, 0, &mut gs.ecs),
-            VirtualKeyCode::Up => try_move_player(0, -1, &mut gs.ecs),
-            VirtualKeyCode::Down => try_move_player(0, 1, &mut gs.ecs),
+            VirtualKeyCode::Left |
+            VirtualKeyCode::Numpad4 |
+            VirtualKeyCode::A => try_move_player(-1, 0, &mut gs.ecs),
+
+            VirtualKeyCode::Right |
+            VirtualKeyCode::Numpad6 |
+            VirtualKeyCode::D => try_move_player(1, 0, &mut gs.ecs),
+
+            VirtualKeyCode::Up |
+            VirtualKeyCode::Numpad8 |
+            VirtualKeyCode::W => try_move_player(0, -1, &mut gs.ecs),
+
+            VirtualKeyCode::Down |
+            VirtualKeyCode::Numpad2 |
+            VirtualKeyCode::S => try_move_player(0, 1, &mut gs.ecs),
             _ => {}
         },
     }
