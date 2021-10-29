@@ -1,4 +1,4 @@
-use rltk::{GameState, Rltk, RGB, VirtualKeyCode, RandomNumberGenerator};
+use rltk::{ Rltk, RGB, BaseMap, Algorithm2D, RandomNumberGenerator, Point};
 use specs::prelude::*;
 use std::cmp::{max, min};
 use specs_derive::Component;
@@ -119,6 +119,19 @@ impl Map {
         }
 
         map
+    }
+}
+
+
+impl Algorithm2D for Map {
+    fn dimensions(&self) -> Point {
+        Point::new(self.width, self.height)
+    }
+}
+
+impl BaseMap for Map {
+    fn is_opaque(&self, idx: usize) -> bool {
+        self.tiles[idx as usize] == TileType::Wall
     }
 }
 
