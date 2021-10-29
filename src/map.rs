@@ -96,7 +96,7 @@ impl Map {
 
             if ok == true {
 
-                println!("x1: {}, x2: {}, y1: {}, y2: {}",new_room.x1, new_room.x2, new_room.y1, new_room.y2 );
+                println!("Room position - x1: {}, x2: {}, y1: {}, y2: {}",new_room.x1, new_room.x2, new_room.y1, new_room.y2 );
 
                 map.apply_room_to_map(&new_room);
 
@@ -118,11 +118,8 @@ impl Map {
             }
         }
 
-
         map
     }
-
-
 }
 
 

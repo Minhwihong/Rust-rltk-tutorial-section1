@@ -3,16 +3,21 @@ use specs::prelude::*;
 use std::cmp::{max, min};
 use specs_derive::Component;
 
+
 mod map;
 mod rect;
+mod components;
+mod visibility_system;
 
 
 pub use map::*;
 pub use rect::*;
+pub use components::ViewShed;
+pub use visibility_system::VisibilitySystem;
 
 
 #[derive(Component)]
-struct Position {
+pub struct Position {
     x: i32,
     y: i32,
 }
@@ -60,13 +65,23 @@ struct State {
 }
 
 
+// impl State {
+//     fn run_systems(&mut self){
+//         let mut lw = LeftWalker{};
+//         lw.run_now(&self.ecs);
+//         self.ecs.maintain();
+//     }
+// }
+
 impl State {
     fn run_systems(&mut self){
-        let mut lw = LeftWalker{};
-        lw.run_now(&self.ecs);
+        let mut vis = VisibilitySystem{};
+        vis.run_now(&self.ecs);
+
         self.ecs.maintain();
     }
 }
+
 
 
 
@@ -110,6 +125,7 @@ fn main() -> rltk::BError  {
     gs.ecs.register::<Renderable>();
     gs.ecs.register::<LeftMover>();
     gs.ecs.register::<Player>();
+    gs.ecs.register::<ViewShed>();
 
     // let (rooms, map) = new_map_rooms_and_corridors();
     // gs.ecs.insert(map);
@@ -131,6 +147,10 @@ fn main() -> rltk::BError  {
             bg : RGB::named(rltk::BLACK),
         })
         .with(Player{})
+        .with(ViewShed{
+            visible_tiles : Vec::new(),
+            range : 8
+        })
         .build();
 
 
