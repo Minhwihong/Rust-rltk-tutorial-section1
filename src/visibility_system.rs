@@ -15,6 +15,7 @@ impl<'a> System<'a> for VisibilitySystem {
 
         let (map, mut viewshed, pos) = data;
 
+
         for (viewshed, pos) in (&mut viewshed, &pos).join(){
 
             viewshed.visible_tiles.clear();
