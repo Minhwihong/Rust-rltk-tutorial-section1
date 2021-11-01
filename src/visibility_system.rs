@@ -1,8 +1,8 @@
 use specs::prelude::*;
-use super::{ViewShed, Position, Map};
-use specs::{RunningTime, AccessorCow};
+use super::{ViewShed, Position, Map, Player};
+//use specs::{RunningTime, AccessorCow};
 use rltk::{field_of_view, Point};
-use crate::Player;
+//use crate::Player;
 
 pub struct VisibilitySystem {}
 

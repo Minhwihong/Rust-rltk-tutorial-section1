@@ -1,7 +1,7 @@
 use rltk::{ Rltk, RGB, BaseMap, Algorithm2D, RandomNumberGenerator, Point};
 use specs::prelude::*;
 use std::cmp::{max, min};
-use specs_derive::Component;
+//use specs_derive::Component;
 
 
 use super::{Rect, Player};
