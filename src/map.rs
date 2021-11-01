@@ -24,7 +24,8 @@ pub struct Map{
     pub tiles: Vec<TileType>,
     pub rooms: Vec<Rect>,
     pub width: i32,
-    pub height: i32
+    pub height: i32,
+    pub revealed_tiles : Vec<bool>,
 }
 
 
@@ -69,7 +70,8 @@ impl Map {
             tiles : vec![TileType::Wall; 80*50],
             rooms : Vec::new(),
             width : 80,
-            height : 50
+            height : 50,
+            revealed_tiles : vec![false; 80*50],
         };
 
         const MAX_ROOMS : i32 = 30;
@@ -150,10 +152,10 @@ pub fn draw_map(ecs: &World, ctx: &mut Rltk){
         let mut y = 0;
         let mut  x = 0;
 
-        for tile in map.tiles.iter() {
+        for (idx,tile) in map.tiles.iter().enumerate() {
             let pt = Point::new(x,y);
 
-            if viewshed.visible_tiles.contains(&pt) {
+            if map.revealed_tiles[idx]{
                 match tile {
                     TileType::Floor => {
                         ctx.set(x,y, RGB::from_f32(0.5, 0.5, 0.5), RGB::from_f32(0., 0., 0.), rltk::to_cp437('.'));
