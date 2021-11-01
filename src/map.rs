@@ -177,29 +177,6 @@ pub fn draw_map(ecs: &World, ctx: &mut Rltk){
 }
 
 
-// pub fn draw_map(map: &Map, ctx: &mut Rltk){
-//     let mut y = 0;
-//     let mut x = 0;
-//
-//     for tile in map.tiles.iter() {
-//         //Render a tile depending upon the tile type
-//         match tile {
-//             TileType::Floor => {
-//                 ctx.set(x,y, RGB::from_f32(0.5, 0.5, 0.5), RGB::from_f32(0., 0., 0.), rltk::to_cp437('.'));
-//             },
-//             TileType::Wall => {
-//                 ctx.set(x,y, RGB::from_f32(0.5, 1.0, 0.5), RGB::from_f32(0., 0., 0.), rltk::to_cp437('#'));
-//             }
-//         }
-//
-//         // Move the coordinates
-//         x += 1;
-//         if x > 79 {
-//             x = 0;
-//             y += 1;
-//         }
-//     }
-// }
 
 
 
