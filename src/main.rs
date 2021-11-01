@@ -20,10 +20,6 @@ pub use visibility_system::VisibilitySystem;
 
 
 
-// impl Component for Position {
-//     type Storage = VecStorage<Self>;
-// }
-
 #[derive(Component)]
 struct Renderable {
     glyph: rltk::FontCharType,
@@ -112,7 +108,7 @@ fn main() -> rltk::BError  {
         .with(ViewShed{
             visible_tiles : Vec::new(),
             range : 8,
-            dirty : false,
+            dirty : true,
         })
         .build();
 
