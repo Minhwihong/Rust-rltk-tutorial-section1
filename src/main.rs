@@ -9,18 +9,15 @@ mod rect;
 mod components;
 mod visibility_system;
 mod player;
+mod monster_ai_system;
 
 
 pub use map::*;
 pub use rect::*;
-pub use components::{Position, ViewShed, Renderable};
+pub use components::{Position, ViewShed, Renderable, Monster};
 pub use player::*;
 pub use visibility_system::VisibilitySystem;
-
-
-
-
-
+pub use monster_ai_system::{MonsterAI};
 
 
 
@@ -34,6 +31,9 @@ impl State {
     fn run_systems(&mut self){
         let mut vis = VisibilitySystem{};
         vis.run_now(&self.ecs);
+
+        let mut mob = MonsterAI{};
+        mob.run_now(&self.ecs);
 
         self.ecs.maintain();
     }
@@ -84,21 +84,34 @@ fn main() -> rltk::BError  {
     gs.ecs.register::<Renderable>();
     gs.ecs.register::<Player>();
     gs.ecs.register::<ViewShed>();
+    gs.ecs.register::<Monster>();
 
 
     let game_map= Map::new_map_rooms_and_corridors();
     let (player_x, player_y) = game_map.rooms[0].center();
 
+    let mut rng = rltk::RandomNumberGenerator::new();
+
     for room in game_map.rooms.iter().skip(1){
         let (x,y) = room.center();
+
+        let glyph : rltk::FontCharType;
+        let roll = rng.roll_dice(1,2);
+
+        match roll {
+            1 => {glyph = rltk::to_cp437('g')}
+            _ => {glyph = rltk::to_cp437('m')}
+        }
+
         gs.ecs.create_entity()
             .with(Position{x,y})
             .with(Renderable{
-                glyph : rltk::to_cp437('g'),
+                glyph : glyph,
                 fg: RGB::named(rltk::RED),
                 bg: RGB::named(rltk::BLACK),
             })
             .with(ViewShed{visible_tiles: Vec::new(), range: 8, dirty: true})
+            .with(Monster{})
             .build();
     }
 
