@@ -85,6 +85,19 @@ fn main() -> rltk::BError  {
     let game_map= Map::new_map_rooms_and_corridors();
     let (player_x, player_y) = game_map.rooms[0].center();
 
+    for room in game_map.rooms.iter().skip(1){
+        let (x,y) = room.center();
+        gs.ecs.create_entity()
+            .with(Position{x,y})
+            .with(Renderable{
+                glyph : rltk::to_cp437('g'),
+                fg: RGB::named(rltk::RED),
+                bg: RGB::named(rltk::BLACK),
+            })
+            .with(ViewShed{visible_tiles: Vec::new(), range: 8, dirty: true})
+            .build();
+    }
+
     gs.ecs.insert(game_map);
 
 
