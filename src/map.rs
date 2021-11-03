@@ -4,8 +4,8 @@ use std::cmp::{max, min};
 //use specs_derive::Component;
 
 
-use super::{Rect, Player};
-use crate::ViewShed;
+use super::{Rect};
+//use crate::ViewShed;
 
 
 /*
@@ -84,7 +84,7 @@ impl Map {
         let mut rng = RandomNumberGenerator::new();
 
 
-        for i in 0..MAX_ROOMS {
+        for _i in 0..MAX_ROOMS {
             let w = rng.range(MIN_SIZE, MAX_SIZE);
             let h = rng.range(MIN_SIZE, MAX_SIZE);
             let x = rng.roll_dice(1, map.width - w - 1) - 1;

@@ -1,8 +1,13 @@
 use specs_derive::Component;
 use specs::prelude::*;
-//use rltk::{GameState, Rltk, RGB, VirtualKeyCode};
+use rltk::{RGB};
 
-
+#[derive(Component)]
+pub struct Renderable {
+    pub glyph: rltk::FontCharType,
+    pub fg: RGB,
+    pub bg: RGB,
+}
 
 
 #[derive(Component)]

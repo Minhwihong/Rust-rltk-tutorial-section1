@@ -29,7 +29,7 @@ impl<'a> System<'a> for VisibilitySystem {
 
                 let p: Option<&Player> = player.get(ent);
 
-                if let Some(p) = p {
+                if let Some(_p) = p {
 
                     for t in map.visible_tiles.iter_mut() {
                         *t = false;

@@ -38,7 +38,7 @@ pub fn player_input(gs: &mut State, ctx: &mut Rltk){
     // Player movement
     match ctx.key {
         None => {}
-        Some(Key) => match Key {
+        Some(key) => match key {
             VirtualKeyCode::Left |
             VirtualKeyCode::Numpad4 |
             VirtualKeyCode::A => try_move_player(-1, 0, &mut gs.ecs),

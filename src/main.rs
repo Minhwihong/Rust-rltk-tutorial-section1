@@ -1,6 +1,6 @@
-use rltk::{GameState, Rltk, RGB, VirtualKeyCode};
+use rltk::{GameState, Rltk, RGB};
 use specs::prelude::*;
-use specs_derive::Component;
+//use specs_derive::Component;
 
 
 
@@ -13,19 +13,14 @@ mod player;
 
 pub use map::*;
 pub use rect::*;
-pub use components::{Position, ViewShed};
+pub use components::{Position, ViewShed, Renderable};
 pub use player::*;
 pub use visibility_system::VisibilitySystem;
 
 
 
 
-#[derive(Component)]
-struct Renderable {
-    glyph: rltk::FontCharType,
-    fg: RGB,
-    bg: RGB,
-}
+
 
 
 
@@ -56,7 +51,7 @@ impl GameState for State {
 
 
         //let map = self.ecs.fetch::<Vec<TileType>>();
-        let map = self.ecs.fetch::<Map>();
+        //let map = self.ecs.fetch::<Map>();
         draw_map(&self.ecs, ctx);
 
         let positions = self.ecs.read_storage::<Position>();
@@ -67,8 +62,6 @@ impl GameState for State {
         }
 
 
-
-        //self.run_systems();
     }
 }
 
