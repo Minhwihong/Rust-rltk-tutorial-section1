@@ -20,9 +20,16 @@ pub use visibility_system::VisibilitySystem;
 pub use monster_ai_system::{MonsterAI};
 
 
+#[derive(PartialEq, Copy, Clone)]
+pub enum RunState {
+    Paused,
+    Running,
+}
+
 
 pub struct State {
-    ecs: World
+    ecs: World,
+    pub runstate: RunState,
 }
 
 
@@ -46,8 +53,15 @@ impl GameState for State {
     fn tick(&mut self, ctx: &mut Rltk) {
         ctx.cls();
 
-        self.run_systems();
-        player_input(self, ctx);
+        // monsters only think about what to do when you move. That's a basic turn-based tick loop!
+        if self.runstate == RunState::Running {
+
+            self.run_systems();
+            self.runstate = RunState::Paused;
+        }
+        else {
+            self.runstate = player_input(self, ctx);
+        }
 
 
         draw_map(&self.ecs, ctx);
@@ -77,7 +91,8 @@ fn main() -> rltk::BError  {
         .build()?;
 
     let mut gs = State {
-        ecs: World::new()
+        ecs: World::new(),
+        runstate : RunState::Running,
     };
 
     gs.ecs.register::<Position>();

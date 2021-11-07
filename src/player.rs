@@ -4,7 +4,7 @@ use std::cmp::{max, min};
 use specs_derive::Component;
 
 
-use super::{ Position, Map, TileType, State};
+use super::{ Position, Map, TileType, State, RunState};
 use crate::ViewShed;
 
 #[derive(Component, Debug)]
@@ -33,11 +33,11 @@ pub fn try_move_player(delta_x: i32, delta_y: i32, ecs: &mut World){
 }
 
 
-pub fn player_input(gs: &mut State, ctx: &mut Rltk){
+pub fn player_input(gs: &mut State, ctx: &mut Rltk) -> RunState {
 
     // Player movement
     match ctx.key {
-        None => {}
+        None => { return RunState::Paused }
         Some(key) => match key {
             VirtualKeyCode::Left |
             VirtualKeyCode::Numpad4 |
@@ -57,5 +57,7 @@ pub fn player_input(gs: &mut State, ctx: &mut Rltk){
             _ => {}
         },
     }
+
+    RunState::Running
 
 }

@@ -26,3 +26,5 @@ pub struct Position {
 
 #[derive(Component, Debug)]
 pub struct Monster{ }
+
+
