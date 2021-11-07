@@ -1,4 +1,4 @@
-use rltk::{GameState, Rltk, RGB};
+use rltk::{GameState, Rltk, RGB,Point};
 use specs::prelude::*;
 //use specs_derive::Component;
 
@@ -131,6 +131,7 @@ fn main() -> rltk::BError  {
     }
 
     gs.ecs.insert(game_map);
+    gs.ecs.insert(Point::new(player_x, player_y));
 
 
     // builder pattern (Combining functions in this fashion is called method chaining)

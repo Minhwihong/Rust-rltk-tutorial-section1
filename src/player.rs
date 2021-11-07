@@ -1,4 +1,4 @@
-use rltk::{ Rltk, VirtualKeyCode};
+use rltk::{ Rltk, VirtualKeyCode, Point};
 use specs::prelude::*;
 use std::cmp::{max, min};
 use specs_derive::Component;
@@ -18,6 +18,8 @@ pub fn try_move_player(delta_x: i32, delta_y: i32, ecs: &mut World){
     let mut players = ecs.write_storage::<Player>();
     let map = ecs.fetch::<Map>();
     let mut viewsheds = ecs.write_storage::<ViewShed>();
+    let mut ppos = ecs.write_resource::<Point>();
+
 
     for (_player, pos, viewshed) in (&mut players, &mut positions, &mut viewsheds).join() {
         let destination_idx = Map::xy_idx(&map, pos.x + delta_x, pos.y + delta_y);
@@ -27,6 +29,9 @@ pub fn try_move_player(delta_x: i32, delta_y: i32, ecs: &mut World){
             pos.y = min(49, max(0, pos.y + delta_y));
 
             viewshed.dirty = true;
+
+            ppos.x = pos.x;
+            ppos.y = pos.y;
         }
 
     }
