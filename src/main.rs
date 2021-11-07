@@ -14,7 +14,7 @@ mod monster_ai_system;
 
 pub use map::*;
 pub use rect::*;
-pub use components::{Position, ViewShed, Renderable, Monster};
+pub use components::{Position, ViewShed, Renderable, Monster, Name};
 pub use player::*;
 pub use visibility_system::VisibilitySystem;
 pub use monster_ai_system::{MonsterAI};
@@ -100,6 +100,7 @@ fn main() -> rltk::BError  {
     gs.ecs.register::<Player>();
     gs.ecs.register::<ViewShed>();
     gs.ecs.register::<Monster>();
+    gs.ecs.register::<Name>();
 
 
     let game_map= Map::new_map_rooms_and_corridors();
@@ -107,15 +108,16 @@ fn main() -> rltk::BError  {
 
     let mut rng = rltk::RandomNumberGenerator::new();
 
-    for room in game_map.rooms.iter().skip(1){
+    for (i, room) in game_map.rooms.iter().skip(1).enumerate() {
         let (x,y) = room.center();
 
         let glyph : rltk::FontCharType;
         let roll = rng.roll_dice(1,2);
+        let name: String;
 
         match roll {
-            1 => {glyph = rltk::to_cp437('g')}
-            _ => {glyph = rltk::to_cp437('m')}
+            1 => {glyph = rltk::to_cp437('G'); name = "Goblin".to_string();}
+            _ => {glyph = rltk::to_cp437('O'); name = "Orc".to_string();}
         }
 
         gs.ecs.create_entity()
@@ -127,6 +129,7 @@ fn main() -> rltk::BError  {
             })
             .with(ViewShed{visible_tiles: Vec::new(), range: 8, dirty: true})
             .with(Monster{})
+            .with(Name{name: format!("{} #{}", &name, i)})
             .build();
     }
 
@@ -149,6 +152,7 @@ fn main() -> rltk::BError  {
             range : 8,
             dirty : true,
         })
+        .with(Name{name: "player".to_string()})
         .build();
 
 
