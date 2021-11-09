@@ -10,14 +10,16 @@ mod components;
 mod visibility_system;
 mod player;
 mod monster_ai_system;
+mod map_indexing_system;
 
 
 pub use map::*;
 pub use rect::*;
-pub use components::{Position, ViewShed, Renderable, Monster, Name};
+pub use components::{Position, ViewShed, Renderable, Monster, Name, BlockTile};
 pub use player::*;
 pub use visibility_system::VisibilitySystem;
 pub use monster_ai_system::{MonsterAI};
+pub use map_indexing_system::{MapIndexingSystem};
 
 
 #[derive(PartialEq, Copy, Clone)]
@@ -41,6 +43,10 @@ impl State {
 
         let mut mob = MonsterAI{};
         mob.run_now(&self.ecs);
+
+        let mut mapindex = MapIndexingSystem{};
+        mapindex.run_now(&self.ecs);
+
 
         self.ecs.maintain();
     }
@@ -101,6 +107,7 @@ fn main() -> rltk::BError  {
     gs.ecs.register::<ViewShed>();
     gs.ecs.register::<Monster>();
     gs.ecs.register::<Name>();
+    gs.ecs.register::<BlockTile>();
 
 
     let game_map= Map::new_map_rooms_and_corridors();
@@ -130,6 +137,7 @@ fn main() -> rltk::BError  {
             .with(ViewShed{visible_tiles: Vec::new(), range: 8, dirty: true})
             .with(Monster{})
             .with(Name{name: format!("{} #{}", &name, i)})
+            .with(BlockTile{})
             .build();
     }
 
