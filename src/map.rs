@@ -1,4 +1,4 @@
-use rltk::{ Rltk, RGB, BaseMap, Algorithm2D, RandomNumberGenerator, Point};
+use rltk::{Rltk, RGB, BaseMap, Algorithm2D, RandomNumberGenerator, Point};
 use specs::prelude::*;
 use std::cmp::{max, min};
 //use specs_derive::Component;
@@ -63,6 +63,20 @@ impl Map {
             }
         }
     }
+
+    fn is_exit_valid(&self, x: i32, y: i32) -> bool {
+
+        if x < 1 || x > self.width-1 || y < 1 || y > self.height-1 {
+            return false;
+        }
+
+        let idx = self.xy_idx(x, y);
+        self.tiles[idx as usize] != TileType::Wall
+    }
+
+
+
+
 
     /// Makes a new map using the algorithm from http://rogueliketutorials.com/tutorials/tcod/part-3/
     /// This gives a handful of random rooms and corridors joining them together.
@@ -129,6 +143,9 @@ impl Map {
 }
 
 
+
+
+
 impl Algorithm2D for Map {
     fn dimensions(&self) -> Point {
         Point::new(self.width, self.height)
@@ -136,6 +153,31 @@ impl Algorithm2D for Map {
 }
 
 impl BaseMap for Map {
+
+    fn get_pathing_distance(&self, idx1:usize, idx2:usize) -> f32 {
+        let w = self.width as usize;
+        let p1 = Point::new(idx1 % w, idx1 / w);
+        let p2 = Point::new(idx2 % w, idx2 / w);
+        rltk::DistanceAlg::Pythagoras.distance2d(p1, p2)
+    }
+
+    fn get_available_exits(&self, idx: usize) -> rltk::SmallVec<[(usize, f32); 10]> {
+
+        let mut exits = rltk::SmallVec::new();
+
+        let x = idx as i32 % self.width;
+        let y = idx  as i32 / self.width;
+        let w = self.width as usize;
+
+        // cardinal directions
+        if self.is_exit_valid(x-1, y) { exits.push((idx-1, 1.0))};
+        if self.is_exit_valid(x+1, y) { exits.push((idx+1, 1.0))};
+        if self.is_exit_valid(x, y-1) { exits.push((idx-w, 1.0))};
+        if self.is_exit_valid(x, y+1) { exits.push((idx+w, 1.0))};
+
+        exits
+    }
+
     fn is_opaque(&self, idx: usize) -> bool {
         self.tiles[idx as usize] == TileType::Wall
     }
